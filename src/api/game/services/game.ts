@@ -8,11 +8,10 @@ const publisherService = "api::publisher.publisher";
 const developerService = "api::developer.developer";
 const categoryService = "api::category.category";
 const platformService = "api::platform.platform";
-
 async function getGameInfo(slug) {
   const gogSlug = slug.replaceAll("-", "_").toLowerCase();
 
-  const body = await axios.get(`http://www.gog.com/game/${gogSlug}`);
+  const body = await axios.get(`https://www.gog.com/game/${gogSlug}`);
   const dom = new JSDOM(body.data);
 
   const raw_description = dom.window.document.querySelector(".description");
@@ -144,7 +143,7 @@ export default factories.createCoreService(gameService, () => ({
       data: { products },
     } = await axios.get(gogApiUrl);
 
-    await createManyToManyData([products[4], products[6]]);
-    await createGames([products[4], products[6]]);
+    await createManyToManyData([products[0], products[1]]);
+    await createGames([products[0], products[1]]);
   },
 }));
