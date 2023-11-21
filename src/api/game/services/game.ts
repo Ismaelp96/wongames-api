@@ -1,8 +1,11 @@
-import { factories } from "@strapi/strapi";
+/**
+ * game service
+ */
 import axios from "axios";
 import { JSDOM } from "jsdom";
 import slugify from "slugify";
 import qs from "querystring";
+import { factories } from "@strapi/strapi";
 
 const gameService = "api::game.game";
 const publisherService = "api::publisher.publisher";
@@ -14,7 +17,7 @@ function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function Expeption(e) {
+function Exception(e) {
   return { e, data: e.data && e.data.errors && e.data.errors };
 }
 
@@ -45,7 +48,7 @@ async function getGameInfo(slug) {
         : "BR0",
     };
   } catch (error) {
-    console.log("getGameInfo:", Expeption(error));
+    console.log("getGameInfo:", Exception(error));
   }
 }
 
@@ -54,9 +57,10 @@ async function getByName(name, entityService) {
     const item = await strapi.service(entityService).find({
       filters: { name },
     });
+
     return item.results.length > 0 ? item.results[0] : null;
   } catch (error) {
-    console.log("getByName:", Expeption(error));
+    console.log("getByName:", Exception(error));
   }
 }
 
@@ -73,7 +77,7 @@ async function create(name, entityService) {
       });
     }
   } catch (error) {
-    console.log("create:", Expeption(error));
+    console.log("create:", Exception(error));
   }
 }
 
@@ -139,7 +143,7 @@ async function setImage({ image, game, field = "cover" }) {
       },
     });
   } catch (error) {
-    console.log("setImage:", Expeption(error));
+    console.log("setImage:", Exception(error));
   }
 }
 
@@ -211,10 +215,10 @@ export default factories.createCoreService(gameService, () => ({
         data: { products },
       } = await axios.get(gogApiUrl);
 
-      await createManyToManyData(products[4]);
-      await createGames(products[4]);
+      await createManyToManyData(products);
+      await createGames(products);
     } catch (error) {
-      console.log("populate:", Expeption(error));
+      console.log("populate:", Exception(error));
     }
   },
 }));
