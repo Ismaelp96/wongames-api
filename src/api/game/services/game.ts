@@ -4,6 +4,7 @@
 import axios from "axios";
 import { factories } from "@strapi/strapi";
 import { JSDOM } from "jsdom";
+import slugify from "slugify";
 
 async function getGameInfo(slug) {
   const gogSlug = slug.replaceAll("-", "_").toLowerCase();
@@ -38,6 +39,24 @@ export default factories.createCoreService("api::game.game", () => ({
     const {
       data: { products },
     } = await axios.get(gogApiUrl);
+
+    // products[2].developers.map(async (developer) => {
+    //   await strapi.service("api::developer.developer").create({
+    //     data: {
+    //       name: developer,
+    //       slug: slugify(developer, { strict: true, lower: true }),
+    //     },
+    //   });
+    // });
+
+    products[2].publishers.map(async (publisher) => {
+      await strapi.service("api::publisher.publisher").create({
+        data: {
+          name: publisher,
+          slug: slugify(publisher, { strict: true, lower: true }),
+        },
+      });
+    });
 
     // console.log(await getGameInfo(products[2].slug));
   },
